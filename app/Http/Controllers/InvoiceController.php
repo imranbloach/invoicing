@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Invoice;
 use App\Http\Requests\InvoiceRequest;
 use App\Notifications\InvoicePaidNotification;
+use App\Models\Customer;
 class InvoiceController extends Controller
 {
     /**
@@ -94,23 +95,17 @@ class InvoiceController extends Controller
         // Mark the specified invoice as paid and send a notification to the customer.
         $invoice = Invoice::find($id);
         if(!empty($invoice)){
-            $invoice->update(['status'=>'pending']);
+            $invoice->update(['status'=>'paid']);
             return response()->json(['status'=>'success', 'message'=>'Invoice paid'], 201);
         }else {
             return response()->json(['status'=>'failed', 'data'=>'Data not found'], 503);
         }
     }
 
-    public function assignInvoiceToCustomers(string $id)
+    public function assignInvoice(Request $request, string $id)
     {
-        // Mark the specified invoice as paid and send a notification to the customer.
-        $invoice = Invoice::find($id);
-        if(!empty($invoice)){
-            $invoice->update(['status'=>'pending']);
-            $invoice->customer->notify(new InvoicePaidNotification($invoice));
-            return response()->json(['status'=>'success', 'message'=>'Invoice paid'], 201);
-        }else {
-            return response()->json(['status'=>'failed', 'data'=>'Data not found'], 503);
-        }
+        $data = $request->all();
+        Customer::whereIn('id', $data['customers'])->update(['invoice_id'=>$id]);
+        return response()->json(['status'=>'success', 'message'=>'Invoice assigned'], 201);
     }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("name");
             $table->string("email")->unique();
             $table->string("phone");
-            //$table->foreignIdFor(Invoice::class)->constrained()->nullable()->default(1);
+            $table->foreignIdFor(Invoice::class)->constrained()->nullable()->default(1);
             $table->timestamps();
         });
     }

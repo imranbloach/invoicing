@@ -18,4 +18,5 @@ use App\Http\Controllers\InvoiceController;
 //     return $request->user();
 // });
 Route::post("/invoices/mark-as-paid/{id}", [InvoiceController::class, "markAsPaid"]);
+Route::post("/invoices/assign-invoice/{id}", [InvoiceController::class, "assignInvoice"]);
 Route::resource('/invoices', InvoiceController::class);

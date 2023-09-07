@@ -17,6 +17,7 @@ class CustomerSeeder extends Seeder
         $faker = Faker::create();
         foreach (range(1, 5) as $value) {
             DB::table("customers")->insert([
+                'invoice_id' => 1,
                 'name' => $faker->name,
                 'email' => $faker->unique()->safeEmail,
                 'phone' => $faker->phoneNumber,
